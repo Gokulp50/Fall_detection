@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/architecture/page": "app/architecture/page.js",
+  "/monitoring/page": "app/monitoring/page.js",
+  "/caregiver/page": "app/caregiver/page.js",
+  "/hospital/page": "app/hospital/page.js",
+  "/command/page": "app/command/page.js",
+  "/analytics/page": "app/analytics/page.js",
+  "/admin/page": "app/admin/page.js"
+}

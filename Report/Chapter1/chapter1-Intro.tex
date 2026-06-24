@@ -1,0 +1,24 @@
+\chapter{Introduction}
+
+\section[Introduction to the Topic]{\textbf{Introduction to the Topic}}
+
+\subsection{Abstract}
+Wearable fall-detection systems for older adults increasingly use machine learning and edge intelligence, but many still stop after classifying a fall and notifying a caregiver. This leaves a gap between accurate detection and clinically useful response: the system must verify patient status, estimate severity, coordinate transport, track response progress, and prepare the receiving hospital. This paper proposes an integrated low-power Edge-AI emergency healthcare platform for elderly fall prediction and response. The platform combines an ESP32-based wearable node, an MPU6050 accelerometer and gyroscope, a heart-rate sensor, TinyML inference, threshold-based verification, physiological verification, Emergency Severity Score (ESS) assessment, caregiver alerting, live patient-location sharing, ambulance coordination, real-time ambulance tracking, hospital prenotification, and a cloud dashboard. The main contribution is an event-driven architecture that links patient, caregiver, ambulance, and hospital stakeholders rather than treating fall detection as an isolated classification task. Mathematical formulations, algorithms, workflow logic, and evaluation metrics are defined to support reproducible implementation. The expected outcome is a compact, energy-aware prototype foundation for dataset-based validation, false-alarm reduction, faster emergency coordination, and ethically governed clinical pilot testing.
+
+\subsection{Background}
+Falls are a major source of injury, hospitalization, loss of independence, and mortality among older adults. A delayed response can increase clinical risk, especially for individuals who live alone or cannot call for help. Wearable accelerometers and gyroscopes provide continuous motion sensing, while heart-rate sensors add patient-state context. ESP32-class microcontrollers make local inference, wireless communication, and low-power operation feasible in compact wearable devices.
+
+Recent work has improved fall recognition using threshold logic, machine learning, deep learning, TinyML, public datasets, and low-power communication. However, high classification accuracy alone does not determine whether the patient is physiologically stable, whether the event is severe, whether an ambulance has been assigned, or whether a hospital has been informed. This paper therefore addresses the integration of wearable Edge-AI fall prediction, physiological verification, and real-time emergency coordination in a single low-power healthcare workflow.
+
+\subsection{Motivation}
+The motivation is to move fall monitoring from isolated alarm generation to coordinated emergency support. Edge inference reduces latency, bandwidth use, and privacy exposure by avoiding continuous raw-data streaming. The ESP32, MPU6050 accelerometer and gyroscope, and heart-rate sensor provide an inexpensive proof-of-concept stack for sampling, feature extraction, quantized TinyML inference, physiological verification, and duty-cycled operation.
+
+\subsection{Scope and Contributions}
+This project makes the following contributions:
+\begin{itemize}
+\item A hybrid Edge-AI fall-prediction pipeline combining TinyML inference with threshold-based physical verification.
+\item A physiological verification layer that uses personalized heart-rate response to support false-alarm reduction.
+\item An ESS model that converts fall probability, impact, physiology, inactivity, and user response into severity levels.
+\item An ambulance coordination and live-tracking workflow that connects caregiver, dispatcher, ambulance crew, and cloud dashboard.
+\item A hospital pre-notification process with reproducible evaluation metrics for prototype validation.
+\end{itemize}

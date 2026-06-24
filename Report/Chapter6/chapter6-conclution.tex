@@ -1,0 +1,112 @@
+\chapter{Tools and Techniques Used}
+
+\section[Tools]{\textbf{Tools}}
+
+\subsection{Software Tools}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{Complete Technology Stack}
+\label{tab:tech_stack}
+\centering
+\begin{tabular}{|p{3.5cm}|p{3.8cm}|p{5cm}|}
+	\hline
+	\textbf{Category} & \textbf{Technology} & \textbf{Purpose} \\
+	\hline
+	Edge Firmware & Arduino / ESP-IDF (C++) & ESP32 sensor sampling, TinyML inference, BLE communication \\
+	\hline
+	Edge AI & TensorFlow Lite Micro & Quantized 1D CNN fall probability inference on-device \\
+	\hline
+	Event Processing & Python 3.11 + FastAPI & Hybrid verification, ESS computation, dispatch coordination \\
+	\hline
+	ASGI Server & Uvicorn & HTTP and WebSocket request serving \\
+	\hline
+	Message Bus \& Cache & Redis 7 & Pub/Sub event bus, live event caching \\
+	\hline
+	Database & PostgreSQL 15 & Persistent patient profiles, events, vitals, ambulance records \\
+	\hline
+	Migrations & Alembic & Version-controlled database schema management \\
+	\hline
+	Frontend Framework & Next.js (React) & Server-side rendered dashboard UI \\
+	\hline
+	Frontend Language & TypeScript & Type-safe frontend development \\
+	\hline
+	Styling & Tailwind CSS & Utility-first CSS framework \\
+	\hline
+	State Management & Zustand & Lightweight React state for real-time event and vitals data \\
+	\hline
+	Map / Tracking & Leaflet.js & Live GPS ambulance tracking map \\
+	\hline
+	Location \& Routing & Google Maps API & Hospital selection, shortest-path routing, ETA calculation \\
+	\hline
+	Authentication & Google OAuth 2.0 & Secure role-based user sign-in \\
+	\hline
+	SMS / Voice Alerts & Twilio & Caregiver and dispatcher emergency notifications \\
+	\hline
+	Email Notifications & Brevo SMTP & Hospital pre-notification and event summary emails \\
+	\hline
+	Containerization & Docker \& Docker Compose & Backend service orchestration and deployment \\
+	\hline
+\end{tabular}
+\end{table}
+
+\subsection{Hardware Tools}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{Hardware Components Used}
+\label{tab:hardware}
+\centering
+\begin{tabular}{|p{4cm}|p{4cm}|p{4.5cm}|}
+	\hline
+	\textbf{Component} & \textbf{Specification} & \textbf{Role} \\
+	\hline
+	ESP32 & Dual-core, 240 MHz, 520 KB SRAM & Central microcontroller for sensing, inference, and communication \\
+	\hline
+	MPU6050 & 6-axis IMU (Acc + Gyro), I2C & Inertial fall detection, posture and impact measurement \\
+	\hline
+	Heart-Rate Sensor & Pulse/PPG sensor & Post-fall physiological deviation and recovery monitoring \\
+	\hline
+	Battery & Li-ion 500--1000 mAh & Rechargeable power supply with duty-cycle optimization \\
+	\hline
+	Gateway Device & Android Smartphone & BLE data relay, GPS localization, HTTPS cloud sync \\
+	\hline
+	Development Machine & Windows 11 PC & Firmware development, model training, and dashboard testing \\
+	\hline
+\end{tabular}
+\end{table}
+
+\subsection{Purpose of Each Tool}
+
+The purpose of each tool is described in Tables~\ref{tab:tech_stack} and~\ref{tab:hardware}. Each technology was selected for its suitability for real-time healthcare applications, low power requirements, and interoperability within an event-driven architecture.
+
+\section[Techniques]{\textbf{Techniques}}
+
+\subsection{Techniques Applied}
+
+\begin{enumerate}
+\item \textbf{TinyML Inference (1D CNN)}: Quantized neural network running directly on the ESP32, estimating fall probability from short inertial data windows with $<$100 ms latency.
+\item \textbf{Hybrid Verification Engine}: Combines probabilistic TinyML output with deterministic physical thresholds and physiological heart-rate deviation to reduce false alarms.
+\item \textbf{Emergency Severity Scoring (ESS)}: Weighted multi-factor scoring combining model confidence, impact peaks, heart-rate deviation, inactivity, and user response for triage classification.
+\item \textbf{Adaptive Duty Cycling}: ESP32 alternates between deep sleep, low-rate monitoring, and high-rate event capture states to maximize battery life.
+\item \textbf{WebSocket-Based Real-Time Streaming}: Persistent bidirectional connections for sub-second ambulance tracking and dashboard event updates.
+\item \textbf{Pub/Sub Messaging}: Redis Pub/Sub decouples ingestion, processing, dispatch, and fan-out services for scalable event delivery.
+\item \textbf{Event-Driven Microservices}: Independent services (Event Processing, Ambulance Dispatch, Hospital Notification, Fan-Out) communicate through events for modular scalability.
+\item \textbf{8-Bit Post-Training Quantization}: Reduces TinyML model size and inference time to fit within ESP32 memory and latency constraints.
+\item \textbf{Personalized Rolling Baseline}: Heart-rate mean ($\mu_H$) and standard deviation ($\sigma_H$) are computed per-user during non-fall periods, enabling normalized physiological deviation scoring.
+\item \textbf{JWT HttpOnly Cookie Auth}: Secure role-based session management preventing XSS token theft.
+\end{enumerate}
+
+\subsection{Reason for Selection}
+
+\begin{itemize}
+\item \textbf{TensorFlow Lite Micro}: Only embedded ML framework with proven ESP32 compatibility and 8-bit quantization support within 50 KB model footprint.
+\item \textbf{Redis Pub/Sub}: Decouples services for independent scaling; direct inter-service calls would create tight coupling and latency bottlenecks.
+\item \textbf{WebSocket over HTTP Polling}: Eliminates per-request overhead, essential for real-time ambulance tracking and live event broadcasting.
+\item \textbf{PostgreSQL}: Reliable ACID compliance for patient and medical event records where data integrity is safety-critical.
+\item \textbf{Google Maps API}: Best-in-class coverage, accuracy, and routing quality for hospital selection and ambulance ETA in Indian deployments.
+\end{itemize}
+
+\subsection{Implementation of Techniques}
+
+The ESP32 firmware implements adaptive duty cycling with configurable thresholds. TinyML inference runs on 2-second sliding windows. The Event Processing Service computes ESS as $S = w_1 p_f + w_2 \hat{A}_{peak} + w_3 \hat{G}_{peak} + w_4 V_H + w_5 I + w_6 C$, where weights are tunable per deployment. The API Gateway validates JWTs and forwards events to the Redis bus. The Fan-Out Service broadcasts only to authorized sessions based on user role and patient assignment, ensuring privacy-compliant real-time monitoring.

@@ -1,0 +1,78 @@
+\chapter{Technology Stack Summary}
+\section{Complete Technology Stack}
+
+The following is a comprehensive summary of all tools and technologies used in the ScalarVerse platform.
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{Backend and Architecture Technologies}
+\label{tab:backend_tech}
+\centering
+\begin{tabular}{|p{4cm}|p{8cm}|}
+	\hline
+	\textbf{Category} & \textbf{Technology} \\
+	\hline
+	Programming Language & Python 3.11 \\
+	\hline
+	Web Framework & FastAPI \\
+	\hline
+	ASGI Server & Uvicorn \\
+	\hline
+	Message Bus & Redis 7 Pub/Sub \\
+	\hline
+	Caching & Redis 7 (Live Price Cache, Application Cache) \\
+	\hline
+	Database & PostgreSQL 15 \\
+	\hline
+	Migrations & Alembic \\
+	\hline
+	Data Strategy & Table Partitioning for Candle Data \\
+	\hline
+	Architecture Pattern & Event-Driven Microservices \\
+	\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{Frontend Technologies}
+\label{tab:frontend_tech}
+\centering
+\begin{tabular}{|p{4cm}|p{8cm}|}
+	\hline
+	\textbf{Category} & \textbf{Technology} \\
+	\hline
+	Framework & Next.js (React) \\
+	\hline
+	Language & TypeScript \\
+	\hline
+	Styling & Tailwind CSS \\
+	\hline
+	State Management & Zustand \\
+	\hline
+	Charting & KLineCharts \\
+	\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{External Integrations}
+\label{tab:external_tech}
+\centering
+\begin{tabular}{|p{4cm}|p{8cm}|}
+	\hline
+	\textbf{Category} & \textbf{Technology} \\
+	\hline
+	Market Data & Binance WebSocket API \\
+	\hline
+	Authentication & Google OAuth 2.0 \\
+	\hline
+	Payments & Cashfree Payment Gateway \\
+	\hline
+	Email & Brevo SMTP \\
+	\hline
+	Containerization & Docker \& Docker Compose \\
+	\hline
+\end{tabular}
+\end{table}

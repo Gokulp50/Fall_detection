@@ -1,0 +1,584 @@
+An Integrated Edge-AI Emergency Healthcare
+Platform for Elderly Fall Prediction Using Wearable
+Sensors and Real-Time Ambulance Coordination
+Abstract—Wearable fall-detection systems for older adults
+increasingly use machine learning and edge intelligence, but
+many still stop after classifying a fall and notifying a caregiver.
+This leaves a gap between accurate detection and clinically
+useful response: the system must verify patient status, estimate
+severity, coordinate transport, track response progress, and
+prepare the receiving hospital. This paper proposes an integrated
+low-power Edge-AI emergency healthcare platform for elderly
+fall prediction and response. The platform combines an ESP32-
+based wearable node, an MPU6050 accelerometer and gyroscope,
+a heart-rate sensor, TinyML inference, threshold-based verification,
+physiological verification, Emergency Severity Score (ESS)
+assessment, caregiver alerting, live patient-location sharing, ambulance
+coordination, real-time ambulance tracking, hospital prenotification,
+and a cloud dashboard. The main contribution is an
+event-driven architecture that links patient, caregiver, ambulance,
+and hospital stakeholders rather than treating fall detection
+as an isolated classification task. Mathematical formulations,
+algorithms, workflow logic, and evaluation metrics are defined to
+support reproducible implementation. The expected outcome is
+a compact, energy-aware prototype foundation for dataset-based
+validation, false-alarm reduction, faster emergency coordination,
+and ethically governed clinical pilot testing.
+Index Terms—Ambulance coordination, edge artificial intelligence,
+elderly healthcare, fall prediction, hospital pre-notification,
+Internet of Things, physiological verification, TinyML, wearable
+sensors.
+I. INTRODUCTION
+A. Background
+Falls are a major source of injury, hospitalization, loss
+of independence, and mortality among older adults [1], [2].
+A delayed response can increase clinical risk, especially for
+individuals who live alone or cannot call for help. Wearable
+accelerometers and gyroscopes provide continuous motion
+sensing, while heart-rate sensors add patient-state context.
+ESP32-class microcontrollers make local inference, wireless
+communication, and low-power operation feasible in compact
+wearable devices.
+Recent work has improved fall recognition using threshold
+logic, machine learning, deep learning, TinyML, public
+datasets, and low-power communication [3]–[5], [8], [10],
+[13]. However, high classification accuracy alone does not determine
+whether the patient is physiologically stable, whether
+the event is severe, whether an ambulance has been assigned,
+or whether a hospital has been informed. This paper therefore
+addresses the integration of wearable Edge-AI fall prediction,
+physiological verification, and real-time emergency coordination
+in a single low-power healthcare workflow.
+B. Motivation
+The motivation is to move fall monitoring from isolated
+alarm generation to coordinated emergency support. Edge
+inference reduces latency, bandwidth use, and privacy exposure
+by avoiding continuous raw-data streaming. The ESP32,
+MPU6050 accelerometer and gyroscope, and heart-rate sensor
+provide an inexpensive proof-of-concept stack for sampling,
+feature extraction, quantized TinyML inference, physiological
+verification, and duty-cycled operation.
+C. Motivation for the Proposed System
+The proposed system treats detection as the first step of
+an emergency workflow. Post-fall physiological verification
+interprets inertial evidence using heart-rate deviation, recovery
+behavior, inactivity, and user confirmation. ESS-based triage
+separates mild, moderate, and critical events so that caregiver
+follow-up, ambulance coordination, live tracking, and hospital
+pre-notification can be activated only when warranted.
+D. Contributions
+This paper makes the following contributions:
+• A hybrid Edge-AI fall-prediction pipeline combining
+TinyML inference with threshold-based physical verification.
+• A physiological verification layer that uses personalized
+heart-rate response to support false-alarm reduction.
+• An ESS model that converts fall probability, impact,
+physiology, inactivity, and user response into severity
+levels.
+• An ambulance coordination and live-tracking workflow
+that connects caregiver, dispatcher, ambulance crew, and
+cloud dashboard.
+• A hospital pre-notification process with reproducible
+evaluation metrics for prototype validation.
+II. RELATED WORK
+A. Wearable Fall Detection Systems
+Wearable fall detection has progressed from fixed thresholds
+to machine-learning and TinyML-enabled systems. Threshold
+methods are interpretable and efficient but sensitive to
+placement, activity intensity, and fall-like activities. Machinelearning
+and deep-learning approaches improve temporal pattern
+recognition on inertial datasets, while cloud-edge comparisons
+and TinyML studies show that fall inference can
+be moved closer to the user to reduce latency and transmission
+demand [3], [5], [8], [10]. Recent surveys emphasize
+that accuracy must be balanced with sampling rate, sensing
+modality, embedded memory, communication cost, and power
+consumption [6], [11]–[15].
+B. Physiological Monitoring for Fall Verification
+Inertial evidence alone does not determine clinical urgency.
+Heart-rate sensing can indicate abnormal post-event response,
+non-recovery, stress, possible syncope-related events, or poor
+sensor contact. Prior accelerometer–heart-rate fusion work
+shows that physiological features support user-adaptive fall
+detection, and user-specific performance differences motivate
+personalized baselines [4], [7]. In this paper, physiology is
+used as a post-fall verification signal that increases severity
+for abnormal recovery or inactivity while allowing low-risk
+cancelled events to be downgraded.
+C. Emergency Response and Ambulance Coordination
+Caregiver notification is useful but incomplete when the
+caregiver is unavailable, the patient is unresponsive, or the
+event is severe. EMS literature highlights telemedicine, prehospital
+decision support, and structured information exchange
+before hospital arrival [16], [17]. Mobile emergency applications
+and smart-homecare systems similarly show the value
+of dashboards, notifications, and monitoring [9], [18]. The
+remaining gap is an integrated pipeline that starts with verified
+wearable fall prediction and continues through severity assessment,
+ambulance coordination, live tracking, and hospital prenotification.
+III. SYSTEM ARCHITECTURE
+A. Overall Architecture
+The overall architecture is shown in Fig. 1. The platform
+is organized as a layered workflow: wearable sensing, local
+fall prediction and verification, emergency escalation, ambulance
+tracking, hospital pre-notification, and dashboard-based
+monitoring.
+B. Wearable Sensing Layer
+The wearable layer contains the ESP32, MPU6050 accelerometer
+and gyroscope, heart-rate sensor, battery subsystem,
+and optional location interface. Inertial channels capture
+impact, rotation, posture transition, and inactivity, while BPM
+measurements provide pre- and post-event physiological context.
+Location is obtained through a paired smartphone, Wi-Fi
+positioning, beacons, or optional low-power GNSS.
+C. Hybrid Edge-AI Fall Prediction Engine
+The hybrid engine runs near the sensor to reduce latency,
+bandwidth use, and privacy exposure. TinyML estimates fall
+probability from inertial windows, while deterministic thresholds
+check acceleration peaks, angular velocity, posture transition,
+and inactivity. This combines learned motion patterns
+with interpretable safety checks.
+B. Fall Prediction Algorithm
+The fall prediction module estimates the probability of a
+fall event using a quantized model fθ(·):
+pf (t) = fθ(Xt), 0 ≤ pf (t) ≤ 1. (3)
+A candidate fall is declared when
+pf (t) ≥ τf , (4)
+where τf balances sensitivity and precision. Model output
+is only the first decision stage because atypical activities
+can resemble falls. The TinyML model is selected under
+memory, latency, and energy constraints; a one-dimensional
+CNN captures short inertial patterns, temporal convolutions
+can add context, and 8-bit quantization is preferred for ESP32
+deployment.
+C. Physiological Verification
+After a candidate fall, the physiological verifier compares
+post-event heart rate with the user’s rolling baseline. Let μH
+and σH be the personalized baseline mean and standard deviation
+computed during stable non-fall periods. The normalized
+post-event deviation is
+ZH =
+Hpost − μH
+σH + ϵ
+, (5)
+where Hpost is a post-event heart-rate statistic and ϵ avoids
+division by zero. The physiological concern flag is set when
+VH =
+(
+1, |ZH| ≥ τH or recovery is abnormal,
+0, otherwise.
+(6)
+Heart-rate verification is not used to reject every fall. Instead, it
+contributes to severity estimation: strong inertial evidence with
+inactivity or abnormal physiology is escalated, while weak
+evidence with normal recovery and immediate cancellation is
+downgraded.
+D. Emergency Severity Assessment
+The Emergency Severity Score computation process is illustrated
+in Fig. 3.
+The ESS combines fall probability, acceleration peak, gyroscope
+peak, heart-rate deviation, inactivity, and user response
+status into a severity value for triage, ambulance dispatch, and
+hospital pre-notification.
+The severity score combines model confidence, physical
+impact, physiological deviation, inactivity, and user response:
+S = w1pf +w2Aˆpeak +w3 ˆGpeak +w4VH +w5I +w6C, (7)
+where ˆ Apeak and ˆGpeak are normalized peak acceleration and
+angular velocity, I indicates prolonged inactivity, C indicates
+failed cancellation or failed user confirmation, and wi are
+design weights. Severity levels are assigned as
+L =
+
+
+Low, S < λ1,
+Moderate, λ1 ≤ S < λ2,
+Critical, S ≥ λ2.
+(8)
+Low severity is logged and sent to caregivers; moderate
+severity prepares dispatch escalation; critical severity triggers
+ambulance coordination subject to local legal and operational
+constraints.
+E. Ambulance Coordination Process
+For moderate or critical events, the cloud server validates
+the packet, confirms location, checks caregiver response, and
+ing
+center, or authorized integration. The ambulance module
+records dispatch state, ambulance identifier, ETA, and route
+progress, preserving human-in-the-loop control where direct
+emergency-number automation is not permitted.
+F. Hospital Pre-Notification Workflow
+Hospital pre-notification is triggered after ambulance assignment
+or caregiver-confirmed transport. The packet includes
+patient profile, event time, location, severity, heart-rate trend,
+movement status, ETA, and optional medical context. Algorithms
+1–3 summarize the hybrid sensing, severity assessment,
+and coordination logic.
+V. EMERGENCY RESPONSE FRAMEWORK
+The emergency response workflow in Fig. 2 connects continuous
+monitoring to false-alarm logging or verified emergency
+routing.
+The wearable acquires inertial and heart-rate data, estimates
+fall probability using TinyML, verifies impact and physiology,
+computes ESS, and activates caregiver notification, ambulance
+coordination, tracking, hospital pre-notification, and dashboard
+logging according to severity.
+Algorithm 1 Hybrid Fall Detection and Verification
+Require: Accelerometer data A, gyroscope data G, heart rate
+H
+Ensure: Emergency severity level
+1: Acquire sensor data.
+2: Extract motion features.
+3: Compute fall probability Pf using TinyML.
+4: if Pf < Threshold then
+5: Continue monitoring.
+6: else
+7: Perform impact verification.
+8: Analyze heart-rate deviation.
+9: Compute Emergency Severity Score.
+10: Classify severity.
+11: Trigger notification workflow.
+12: end if
+13: Store event in cloud dashboard.
+Algorithm 2 Emergency Severity Assessment
+Require: Pf , Ap, Gp, HR, I, U
+Ensure: Severity level
+1: Compute ESS.
+2: ESS = w1Pf + w2Ap + w3Gp + w4HR + w5I + w6U.
+3: if ESS < 30 then
+4: Severity level ← Mild.
+5: else if ESS < 70 then
+6: Severity level ← Moderate.
+7: else
+8: Severity level ← Critical.
+9: end if
+10: Return severity level.
+A.Fall Event Detection
+The wearable samples sensors according to monitoring state
+and converts streams into motion and physiological descriptors
+for hybrid local inference. If no potential fall is identified,
+monitoring resumes.
+B. Patient Status Verification
+For candidate falls, post-fall verification checks heart-rate
+deviation, recovery, inactivity, and cancellation status. Benign
+events are logged; unresolved events advance to severity
+assessment.
+C. Alert Generation
+ESS classifies the event as mild, moderate, or critical. Alerts
+include event time, severity, location, wearable status, and a
+concise physiological summary.
+D. Ambulance Dispatch
+Moderate or critical events create a dispatch request containing
+patient identity, location, severity, event summary,
+and contact information. Confirmation and assignment are
+timestamped for response-time measurement.
+Algorithm 3 Ambulance Coordination and Hospital Notification
+Require: Severity level, patient location
+Ensure: Coordinated emergency response
+1: Receive verified fall event.
+2: Notify caregiver.
+3: if severity level = Mild then
+4: Log event.
+5: else
+6: Request ambulance.
+7: Start live tracking.
+8: Notify hospital.
+9: Update dashboard.
+10: end if
+11: Close event.
+E. Live Tracking
+After assignment, authorized users receive ambulance status
+updates such as en route, arrived at patient, transporting, and
+arrived at hospital. Role-based access protects patient and
+responder privacy.
+F. Hospital Notification
+Hospital pre-notification sends fall time, severity, heart-rate
+trend, patient profile, location, ambulance identifier, and ETA
+before arrival; the dashboard preserves the audit trail.
+VI. EXPERIMENTAL SETUP
+A. Sensor Configuration
+The baseline inertial sampling rate is 25–50 Hz, with short
+100 Hz windows during candidate events to capture impact
+details while limiting energy cost [13]. Heart rate is sampled
+continuously or periodically according to sensor and power
+budget. Waist, wrist, and chest placements should be evaluated
+separately because they trade center-of-mass fidelity, user
+acceptance, arm-motion artifacts, and physiological contact
+quality.
+B. Dataset Description
+Validation will first use public inertial datasets including
+SisFall [19], MobiAct [20], and KFall [8] for reproducible
+comparison. Because these datasets often use simulated falls
+and lack physiological response, a later ethics-approved pilot
+should collect older-adult activities of daily living, safe
+assisted fall-like transitions where permissible, and heartrate
+data across resting, movement, posture-change, and postexertion
+conditions.
+C. Evaluation Procedure
+Evaluation proceeds in six phases: subject-wise dataset
+training, 8-bit ESP32 deployment, hybrid verification against
+model-only and threshold-only baselines, simulated workflow
+testing across caregiver/dispatch/ambulance/hospital states,
+power profiling across sleep/sampling/inference/transmission
+modes, and a usability pilot measuring comfort, alert clarity,
+and dashboard task completion.
+D. Hardware Specifications
+The prototype hardware is summarized in Table I. The
+configuration emphasizes affordability, portability, on-device
+inference, and reproducible evaluation.
+VII. PERFORMANCE METRICS
+Let true positives (TP) be correctly detected falls, true
+negatives (TN) be correctly rejected non-fall activities, false
+TABLE I
+PROPOSED HARDWARE SPECIFICATIONS
+Component Specification and role
+ESP32 Low-power microcontroller for sampling, preprocessing,
+TinyML inference, Bluetooth or Wi-Fi
+communication, and sleep scheduling
+MPU6050 accelerometer Triaxial acceleration for impact, free-fall, posture
+transition, and inactivity analysis
+MPU6050 gyroscope Triaxial angular velocity for rotation and balanceloss
+characterization
+Heart-rate sensor BPM monitoring for pre-event baseline, post-fall
+deviation, and recovery analysis
+Battery Rechargeable lithium cell, target 500–1000 mAh
+depending on enclosure and monitoring interval
+Gateway Smartphone or Wi-Fi router for cloud synchronization
+and location services
+Dashboard Web or mobile interface for caregiver, dispatcher,
+and hospital roles
+positives (FP) be non-falls incorrectly classified as falls, and
+false negatives (FN) be missed falls. Accuracy is
+Accuracy =
+TP + TN
+TP + TN + FP + FN
+. (9)
+Precision is
+Precision =
+TP
+TP + FP
+. (10)
+Recall, also called sensitivity, is
+Recall =
+TP
+TP + FN
+. (11)
+The F1-score is the harmonic mean of precision and recall:
+F1 = 2 ×
+Precision × Recall
+Precision + Recall
+. (12)
+Specificity measures the ability to reject non-fall activities:
+Specificity =
+TN
+TN + FP
+. (13)
+Response time is measured from fall occurrence to the relevant
+response milestone. For caregiver alert response,
+Talert = tcaregiver − tfall. (14)
+For dispatch response,
+Tdispatch = tambulance assigned − tfall. (15)
+Because underscores are not used in implementation logs,
+the deployed system should store each timestamp as an ISO
+8601 field such as fallTime, caregiverAlertTime,
+and ambulanceAssignedTime.
+Average power consumption is estimated from state durations
+and currents:
+Pavg =
+PK
+i=1 V IiTi PK
+i=1 Ti
+, (16)
+where V is supply voltage, Ii is current in state i, and Ti is
+time spent in that state. Average current is
+Iavg =
+PK
+i=1 IiTi PK
+i=1 Ti
+. (17)
+Fig. 4. Accuracy comparison between threshold-based, CNN-based, TinyMLbased,
+and proposed hybrid Edge-AI approaches.
+Battery life in hours is estimated as
+Blife =
+Cbη
+Iavg
+, (18)
+where Cb is battery capacity in mAh and η is usable battery
+efficiency. These equations should be reported with state
+definitions so that energy results are reproducible.
+VIII. RESULTS AND DISCUSSION
+This section reports design-time targets and expected trends
+to guide prototype validation. Measured values should replace
+these estimates after hardware implementation and participantbased
+testing.
+A. Accuracy Analysis
+The accuracy comparison between baseline and proposed
+approaches is shown in Fig. 4.
+Fig. 4 compares baseline and proposed approaches. The
+target is at least 95% accuracy, recall, and specificity under
+subject-wise testing, because random window-level splits can
+overestimate performance. The hybrid design is expected to
+preserve most full-precision accuracy after quantization while
+improving the recall–specificity balance through TinyML pattern
+recognition, physical thresholds, and physiological context.
+B. False Alarm Reduction Analysis
+The false alarm comparison is shown in Fig. 5.
+Fig. 5 shows the expected reduction in false alarms from
+requiring consistency among model probability, inertial peaks,
+posture or inactivity, heart-rate response, and cancellation
+status. Physiology is not treated as proof of injury; it is a
+contextual signal that downgrades active, cancelled, physiologically
+normal events and escalates unresponsive or abnormalrecovery
+cases.
+C. Emergency Response Time Analysis
+The end-to-end response timeline of the proposed framework
+is summarized in Fig. 6.
+Fig. 6 emphasizes reduced information delay rather than
+guaranteed ambulance travel-time reduction. The targets are
+caregiver alert latency below 10 s after verification and cloudto-
+dispatch preparation below 30 s for critical supervised
+workflows. Hospital pre-notification moves patient, severity,
+heart-rate, and ETA information into the transport interval.
+D. Power Consumption Analysis
+The estimated battery-life comparison for different operating
+modes is shown in Fig. 7.
+Fig. 7 reflects the benefit of adaptive sampling, local
+inference, event-based transmission, and sleep scheduling.
+Continuous Wi-Fi or GNSS would reduce lifetime, so the
+design favors low-rate monitoring, short event windows, and
+smartphone-assisted location when possible.
+Fig. 7. Estimated battery life under different operating modes.
+Fig. 8. Confusion matrix of the proposed hybrid fall prediction framework.
+Fig. 8 reports the confusion matrix used to summarize the
+expected classification behavior of the proposed hybrid fall
+prediction framework.
+Prototype validation should target ≥95% accuracy, recall,
+and specificity, <100 ms on-device inference per window, <10
+s caregiver alert latency, <30 s critical dispatch preparation
+in supervised workflows, lower false escalation than modelonly
+and threshold-only baselines, 24–72 h battery life under
+duty cycling, and complete delivery of event time, severity,
+heart-rate trend, location, ETA, and patient profile to the
+hospital dashboard. Compared with threshold-only, cloudonly,
+edge-only, physiological-monitoring, and EMS telehealth
+approaches, the proposed platform’s key distinction is integration:
+sensing, TinyML inference, physiological verification,
+ESS triage, ambulance tracking, and hospital pre-notification
+are connected in one governed workflow. Remaining challenges
+are representative older-adult datasets, regulated dispatch
+integration with human oversight, and concise interoperable
+hospital messages.
+IX. FUTURE WORK
+Future work will implement the complete ESP32 prototype
+and evaluate adaptive switching between low-cost thresholds
+and TinyML inference. The sampling policy will be optimized
+using activity state, battery level, fall history, and sensor confidence
+so that accuracy and battery life are jointly measured.
+Longitudinal data may support predictive analytics based on
+gait variability, near-fall frequency, heart-rate recovery, and
+nighttime movement, but outputs should remain explainable
+and avoid overmedicalization. Smart ambulance allocation can
+incorporate severity, patient location, ambulance availability,
+travel time, hospital capacity, and patient profile; however, dispatch
+decisions are safety critical and must be evaluated with
+emergency medical services partners under human oversight.
+Because the platform handles health and location data, future
+prototypes must include encryption, authentication, role-based
+access, audit logs, consent management, fail-safe behavior,
+and ethics-approved validation with older adults, caregivers,
+responders, and hospital staff. Deployment studies should also
+report failure modes, caregiver workload, and interoperability
+with local clinical documentation systems.
+X. CONCLUSION
+This paper proposed a compact Edge-AI emergency healthcare
+platform for elderly fall prediction and response. The
+platform combines ESP32-based wearable sensing, MPU6050
+inertial data, heart-rate monitoring, TinyML fall prediction,
+threshold verification, physiological verification, ESS-based
+triage, caregiver alerts, patient-location sharing, ambulance coordination,
+live ambulance tracking, hospital pre-notification,
+and cloud dashboard management. Its key innovation is the
+integration of fall classification with post-fall patient-state verification
+and operational emergency coordination. Rather than
+ending with a caregiver notification, the workflow connects
+patient, caregiver, dispatcher, ambulance crew, and hospital
+in an auditable event-driven process. The paper preserved
+mathematical formulations for inertial features, fall probability,
+physiological deviation, severity scoring, classification
+metrics, response time, power consumption, and battery-life
+estimation, and formalized the operational logic through three
+algorithms. Expected results indicate that the hybrid approach
+can maintain high accuracy while reducing false alarms, shortening
+information delay, and supporting low-power operation.
+By preserving local processing and sharing structured event
+summaries, the design also supports privacy-aware aging-inplace
+deployment. The framework provides a reproducible
+basis for prototype implementation, public-dataset evaluation,
+hardware profiling, and ethically governed clinical pilot studies.
+REFERENCES
+[1] World Health Organization, “Falls,” Fact sheet, Apr. 2021. [Online].
+Available: https://www.who.int/news-room/fact-sheets/detail/falls
+[2] Centers for Disease Control and Prevention, “Older adult falls data,”
+National Center for Injury Prevention and Control, 2024. [Online].
+Available: https://www.cdc.gov/falls/data-research/index.html
+[3] D. Mrozek, A. Koczur, and B. Małysiak-Mrozek, “Fall detection in older
+adults with mobile IoT devices and machine learning in the cloud and
+on the edge,” Information Sciences, vol. 537, pp. 132–147, 2020.
+[4] Y.-H. Nho, J. G. Lim, and D.-S. Kwon, “Cluster-analysis-based useradaptive
+fall detection using fusion of heart rate sensor and accelerometer
+in a wearable device,” IEEE Access, vol. 8, pp. 40389–40401, 2020.
+[5] T. Xu, H. Se, and J. Liu, “A fusion fall detection algorithm combining
+threshold-based method and convolutional neural network,” Microprocessors
+and Microsystems, vol. 82, Art. no. 103828, Apr. 2021.
+[6] E. Casilari, R. Lora-Rivera, and F. Garc´ıa-Lagos, “A study on the
+application of convolutional neural networks to fall detection evaluated
+with multiple public datasets,” Sensors, vol. 20, no. 5, Art. no. 1466,
+2020.
+[7] J.-A. Santoyo-Ram´on, E. Casilari, and J.-M. Cano-Garc´ıa, “Impact
+of user characteristics on the performance of wearable fall detection
+systems,” Scientific Reports, vol. 11, Art. no. 23055, 2021.
+[8] X. Yu, J. Jang, and S. Xiong, “A large-scale open motion dataset (KFall)
+and benchmark algorithms for detecting pre-impact fall of the elderly
+using wearable inertial sensors,” Frontiers in Aging Neuroscience, vol.
+13, Art. no. 692865, 2021.
+[9] T. Vaiyapuri, H. Alaskar, S. A. Haq, M. A. Alotaibi, O. I. Khalaf, and
+D. Al-Fahad, “Deep learning enabled elderly fall detection for smart
+homecare,” IEEE Access, vol. 9, pp. 113879–113888, 2021.
+[10] X. Yu, S. Park, D. Kim, E. Kim, J. Kim, W. Kim, Y. An, and S. Xiong,
+“A practical wearable fall detection system based on tiny convolutional
+neural networks,” Biomedical Signal Processing and Control, vol. 86,
+Art. no. 105325, Sep. 2023.
+[11] C. V. F. Pereira, E. M. de Oliveira, and A. D. de Souza, “Machine
+learning applied to edge computing and wearable devices for healthcare:
+Systematic mapping of the literature,” Sensors, vol. 24, no. 19, Art. no.
+6322, 2024.
+[12] M. Villa and E. Casilari, “Wearable fall detectors based on low power
+transmission systems: A systematic review,” Technologies, vol. 12, no.
+9, Art. no. 166, 2024.
+[13] A. Villa and E. Casilari, “The impact of the accelerometer sampling rate
+on the performance of machine and deep learning models in wearable
+fall-detection systems,” Sensors, vol. 26, no. 1, Art. no. 162, 2026.
+[14] O. Flor-Unda, R. Arcos-Reina, C. Estrella-Caicedo, C. Toapanta, F.
+Villao, H. Palacios-Cabrera, et al., “A comparative overview of technological
+advances in fall detection systems for elderly people,” Sensors,
+vol. 25, no. 24, Art. no. 7423, 2025.
+[15] M. Ishaq, D. Guastella, G. Sutera, and G. Muscato, “A systematic review
+of fall detection and prediction technologies for older adults: An analysis
+of sensor modalities and computational models,” Applied Sciences, vol.
+16, no. 4, Art. no. 1929, 2026.
+[16] Y. Kim, C. Groombridge, L. Romero, S. Clare, and M. C. Fitzgerald,
+“Decision support capabilities of telemedicine in emergency prehospital
+care: Systematic review,” Journal of Medical Internet Research, vol. 22,
+no. 12, Art. no. e18959, 2020.
+[17] C. Janerka, G. D. Leslie, M. Mellan, and G. Arendts, “Review article:
+Prehospital telehealth for emergency care: A scoping review,” Emergency
+Medicine Australasia, vol. 35, no. 4, pp. 540–552, 2023.
+[18] I. Plaza, M. Marcos, R. D. Castro, and C. F. Medrano, “Mobile applications
+for emergency response and patient monitoring: A systematic
+review,” International Journal of Medical Informatics, vol. 150, Art. no.
+104450, 2021.
+[19] A. Sucerquia, J. D. L´opez, and J. F. Vargas-Bonilla, “SisFall: A fall and
+movement dataset,” Sensors, vol. 17, no. 1, Art. no. 198, 2017.
+[20] G. Vavoulas, M. Pediaditis, E. G. Spanakis, and M. Tsiknakis, “The
+MobiAct dataset: Recognition of activities of daily living using smartphones,”
+in Proc. Int. Conf. Information and Communication Technologies
+for Ageing Well and e-Health, 2016, pp. 143–151.

@@ -1,0 +1,48 @@
+\chapter{Objectives}
+
+\section[Primary Objectives]{\textbf{Primary Objectives}}
+
+\subsection{Main Objectives}
+
+The main objectives of the EdgeCare Response platform are:
+\begin{enumerate}
+\item To design and implement a low-power wearable edge node (ESP32, MPU6050, heart-rate sensor) capable of continuous inertial and physiological monitoring with on-device TinyML fall prediction, targeting $\geq$95\% accuracy, recall, and specificity under subject-wise testing.
+\item To develop a hybrid Edge-AI fall verification engine combining quantized TinyML inference with deterministic physical thresholds and personalized physiological heart-rate deviation analysis to reduce false alarms compared to model-only or threshold-only baselines.
+\item To design an Emergency Severity Score (ESS) model that integrates fall probability, peak acceleration, angular velocity, heart-rate deviation, inactivity duration, and user response status to classify events as Mild, Moderate, or Critical for tiered emergency escalation.
+\item To build an integrated emergency coordination workflow connecting caregiver notification, ambulance dispatch with real-time GPS tracking, and hospital pre-notification — delivered through a cloud-based Next.js dashboard with role-based access for caregivers, dispatchers, and hospital staff.
+\end{enumerate}
+
+\subsection{Expected Outcomes}
+
+The expected outcomes from achieving the main objectives are:
+\begin{itemize}
+\item A fully functional wearable prototype achieving $\geq$95\% fall detection accuracy with $<$100 ms on-device inference per window and 24--72 hour battery life under adaptive duty cycling.
+\item A hybrid verification engine with significantly reduced false alarm escalation rates compared to model-only and threshold-only baseline systems.
+\item An ESS triage model correctly classifying Mild, Moderate, and Critical events, enabling context-appropriate automated responses without unnecessary ambulance dispatch for low-risk events.
+\item A real-time cloud dashboard enabling caregivers to receive alerts in $<$10 seconds and critical dispatch coordination to be initiated in $<$30 seconds after fall verification.
+\end{itemize}
+
+\section[Secondary Objectives]{\textbf{Secondary Objectives}}
+
+\subsection{Additional Objectives}
+
+\begin{enumerate}
+\item To implement an adaptive duty-cycling strategy on the ESP32 that balances monitoring accuracy with energy efficiency, extending battery life through coordinated sleep/sample/infer/transmit state management.
+\item To validate the system's end-to-end performance using public inertial datasets (SisFall, MobiAct, KFall) and simulated emergency workflow scenarios across caregiver, dispatch, ambulance, and hospital states.
+\end{enumerate}
+
+\subsection{Supporting Goals}
+
+The following supporting goals complement the primary and secondary objectives:
+\begin{itemize}
+\item Hands-on experience with embedded systems programming (ESP32, Arduino/ESP-IDF) and I2C sensor interfacing (MPU6050, heart-rate sensor).
+\item Practical knowledge of TinyML model development, training, 8-bit post-training quantization, and on-device deployment using TensorFlow Lite Micro within strict memory and latency constraints.
+\item Understanding of event-driven cloud microservices architecture using Python FastAPI, Redis Pub/Sub, and PostgreSQL for healthcare data management.
+\item Proficiency in real-time frontend development using Next.js, TypeScript, WebSockets, and Leaflet.js for live ambulance GPS tracking.
+\item Experience with role-based access control (RBAC) and secure session management (Google OAuth 2.0, JWT HttpOnly cookies) for multi-stakeholder healthcare platforms.
+\item Knowledge of external API integration including Google Maps Directions API (routing and ETA), Twilio (SMS/voice alerts), and Brevo SMTP (email notifications).
+\item Understanding of physiological signal processing concepts including personalized heart-rate baseline computation, normalized deviation scoring, and inactivity detection.
+\item Awareness of privacy, consent, and ethical governance requirements for wearable health monitoring systems intended for older adult populations.
+\item Collaborative embedded-to-cloud development practices including hardware-software co-design, iterative prototyping, and cross-functional team coordination.
+\item Foundation for future ethics-approved clinical pilot studies, longitudinal gait analytics, and EMS-integrated smart ambulance allocation.
+\end{itemize}

@@ -1,0 +1,17 @@
+\chapter{Problem Definition}
+
+\section[Problem Statement]{\textbf{Problem Statement}}
+
+\subsection{Definition of the Problem}
+High classification accuracy in wearable fall-detection systems alone does not determine whether the patient is physiologically stable, whether the event is severe, whether an ambulance has been assigned, or whether a hospital has been informed. The problem lies in the gap between isolated alarm generation and actual coordinated emergency support. A delayed response can increase clinical risk, especially for individuals who live alone or cannot call for help. There is a critical need for a system that integrates fall prediction, physiological verification, and real-time emergency coordination in a single workflow.
+
+\section[Background Information (Literature Review)]{\textbf{Background Information (Literature Review)}}
+
+\subsection{Wearable Fall Detection Systems}
+Wearable fall detection has progressed from fixed thresholds to machine-learning and TinyML-enabled systems. Threshold methods are interpretable and efficient but sensitive to placement, activity intensity, and fall-like activities. Machine-learning and deep-learning approaches improve temporal pattern recognition on inertial datasets, while cloud-edge comparisons and TinyML studies show that fall inference can be moved closer to the user to reduce latency and transmission demand. Recent surveys emphasize that accuracy must be balanced with sampling rate, sensing modality, embedded memory, communication cost, and power consumption.
+
+\subsection{Physiological Monitoring for Fall Verification}
+Inertial evidence alone does not determine clinical urgency. Heart-rate sensing can indicate abnormal post-event response, non-recovery, stress, possible syncope-related events, or poor sensor contact. Prior accelerometer–heart-rate fusion work shows that physiological features support user-adaptive fall detection, and user-specific performance differences motivate personalized baselines. In this project, physiology is used as a post-fall verification signal that increases severity for abnormal recovery or inactivity while allowing low-risk cancelled events to be downgraded.
+
+\subsection{Emergency Response and Ambulance Coordination}
+Caregiver notification is useful but incomplete when the caregiver is unavailable, the patient is unresponsive, or the event is severe. EMS literature highlights telemedicine, pre-hospital decision support, and structured information exchange before hospital arrival. Mobile emergency applications and smart-homecare systems similarly show the value of dashboards, notifications, and monitoring. The remaining gap is an integrated pipeline that starts with verified wearable fall prediction and continues through severity assessment, ambulance coordination, live tracking, and hospital pre-notification.

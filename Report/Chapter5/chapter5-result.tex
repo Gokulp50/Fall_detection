@@ -1,0 +1,107 @@
+\chapter{Project Execution}
+
+\section[Planning and Design]{\textbf{Planning and Design}}
+
+\subsection{Brainstorming and Idea Selection}
+
+The project idea originated from the observation that existing wearable fall detection devices typically stop at generating a caregiver alert — they do not verify patient status, estimate clinical severity, coordinate transport, or pre-notify hospitals. The team selected an integrated edge-AI emergency healthcare platform that closes this gap, connecting fall detection to a complete emergency response workflow for elderly users.
+
+\subsection{Requirement Gathering}
+
+Core platform requirements identified:
+\begin{itemize}
+\item Wearable edge node (ESP32, MPU6050, heart-rate sensor) for continuous monitoring and local inference.
+\item Quantized TinyML 1D CNN model for on-device fall probability estimation under ESP32 memory constraints.
+\item Hybrid verification engine combining inertial thresholds and physiological heart-rate deviation.
+\item Emergency Severity Score (ESS) to classify events as Mild, Moderate, or Critical.
+\item Ambulance coordination with Google Maps routing, live GPS tracking, and ETA calculation.
+\item Hospital pre-notification with patient profile, vitals trend, severity, and ETA.
+\item Real-time caregiver/dispatcher/hospital dashboard with WebSocket updates.
+\end{itemize}
+
+\subsection{System Design}
+
+\subsubsection{ESP32 Firmware}
+
+The ESP32 firmware manages sensor sampling, feature extraction, TinyML inference, physiological verification, and BLE/Wi-Fi communication. It implements adaptive duty cycling: deep sleep during inactivity, active 25--50 Hz monitoring during normal activity, and 100 Hz event windows during candidate falls.
+
+\subsubsection{API Gateway Service}
+
+Built with Next.js API routes and FastAPI. Handles JWT authentication (Google OAuth 2.0), RESTful API endpoints for patient profiles, events, and ambulance records, rate limiting, request validation, and WebSocket upgrade handling.
+
+\subsubsection{Event Processing Service}
+
+The core backend service that consumes fall events from the Redis Pub/Sub bus, runs the hybrid verification engine (impact check, physiological check, inactivity check), computes the ESS, classifies severity, and triggers downstream dispatch and notification services.
+
+\subsubsection{Fan-Out Service}
+
+Subscribes to Redis Pub/Sub channels and broadcasts live event updates, ambulance status, and severity scores to all connected dashboard clients via WebSocket.
+
+\subsubsection{Database Design}
+
+PostgreSQL 15 stores patient profiles, event records, ESS values, vitals history, ambulance dispatch records, and audit logs. Schema is managed via Alembic migrations.
+
+\subsubsection{Frontend Design}
+
+Component-based Next.js dashboard with TypeScript. Key components: Patient Profile Panel, Live Event Timeline, ESS Severity Badge, GPS Ambulance Tracker (Leaflet.js), and Hospital Pre-Notification Log. Role-based views are rendered for Caregiver, Dispatcher, and Hospital roles.
+
+\subsection{Design Drafts / Wireframes}
+
+The system architecture diagram (Figure~\ref{fig:system_architecture}) and data flow architecture diagram (Figure~\ref{fig:dataflow_architecture}) served as primary design references.
+
+\section[Implementation]{\textbf{Implementation}}
+
+\subsection{Development Process}
+
+The project followed an iterative embedded-to-cloud development pipeline. ESP32 firmware and sensor integration were implemented first, followed by TinyML model training and on-device deployment, mobile BLE gateway, cloud backend services, and the Next.js dashboard.
+
+\subsection{Module Development}
+
+\subsubsection{Wearable Edge Node}
+MPU6050 and heart-rate sensors sampled at configurable intervals. IMU data extracted into time-domain features (SMA, peak acceleration, angular velocity). TinyML model (1D CNN, 8-bit quantized) runs inference on 2-second sliding windows. Physiological verification compares post-event BPM against rolling baseline.
+
+\subsubsection{API Gateway}
+Endpoints for patient management, event logging, ambulance tracking, and hospital notifications. Custom middleware validates JWT tokens. Rate limiting uses Redis-backed token buckets. Secure HTTPS/WSS transport.
+
+\subsubsection{Event Processing Service}
+Async Python service consuming Redis Pub/Sub events. Implements three-stage verification: impact check (threshold on peak acceleration/gyroscope), physiological check (normalized heart-rate deviation $Z_H$), and inactivity check. ESS scoring: $S = w_1 p_f + w_2 \hat{A}_{peak} + w_3 \hat{G}_{peak} + w_4 V_H + w_5 I + w_6 C$.
+
+\subsubsection{Ambulance Dispatch Service}
+Selects nearest available hospital using Google Maps Distance Matrix API. Calculates shortest path and ETA. Records dispatch state (Requested, Assigned, En Route, Arrived, Transporting, Delivered).
+
+\subsubsection{Dashboard}
+Real-time ambulance GPS tracking using Leaflet.js with WebSocket position updates. Event severity badges (Mild: green, Moderate: amber, Critical: red). Patient vitals sparkline chart. Hospital pre-notification log.
+
+\subsubsection{Database}
+Alembic-managed PostgreSQL schema: patients, events, vitals, ambulance\_records, hospital\_notifications, and audit\_logs tables.
+
+\subsection{Integration of Components}
+
+\begin{itemize}
+\item \textbf{BLE (ESP32 to Phone)}: Wearable streams sensor data and event alerts over Bluetooth Low Energy with local SQLite buffering for offline caching.
+\item \textbf{HTTPS (Phone to Cloud)}: Mobile gateway forwards buffered events and GPS coordinates to API Gateway via encrypted REST calls.
+\item \textbf{Google OAuth 2.0}: Frontend redirect $\rightarrow$ authorization code $\rightarrow$ token exchange $\rightarrow$ JWT session cookie.
+\item \textbf{Google Maps API}: Directions and Distance Matrix for hospital selection, routing, and ETA.
+\item \textbf{Twilio}: SMS/Voice alerts for caregiver and dispatcher notifications.
+\item \textbf{Brevo SMTP}: Email notifications for hospital pre-notification and event summaries.
+\item \textbf{Redis Pub/Sub}: Decoupled event bus connecting the API Gateway, Event Processing Service, and Fan-Out Service.
+\item \textbf{Frontend WebSocket}: Auto-reconnection, Zustand store updates, role-based subscription filtering.
+\end{itemize}
+
+\subsection{Challenges Encountered}
+
+\begin{itemize}
+\item Fitting TinyML model within ESP32's limited SRAM and flash memory constraints.
+\item Maintaining BLE connectivity stability with motion and environmental interference.
+\item Balancing physiological verification sensitivity (detecting genuine emergencies) with specificity (avoiding false alarms).
+\item Achieving real-time WebSocket state consistency across multiple simultaneous user roles.
+\end{itemize}
+
+\subsection{Solutions Implemented}
+
+\begin{itemize}
+\item 8-bit post-training quantization reduced model size to under 50 KB without significant accuracy loss.
+\item BLE reconnection with exponential backoff and local SQLite event queue for offline tolerance.
+\item Personalized rolling heart-rate baseline ($\mu_H$, $\sigma_H$) adapts to individual physiology for lower false-alarm rates.
+\item Redis Pub/Sub with per-role WebSocket subscriptions ensures each dashboard client receives only relevant updates.
+\end{itemize}

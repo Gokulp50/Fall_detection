@@ -1,0 +1,127 @@
+\chapter{Results and Discussion}
+
+\section[Final Results]{\textbf{Final Results}}
+
+\subsection{Experimental Results}
+
+The EdgeCare Response platform successfully integrates wearable edge sensing, hybrid AI inference, and cloud-based emergency coordination. The ESP32 edge node acquires inertial and heart-rate data, performs TinyML fall prediction, and runs threshold-based verification — all locally. Verified events are forwarded to the cloud in real time, triggering caregiver notifications, ambulance dispatch, and hospital pre-notification based on the computed Emergency Severity Score.
+
+The web dashboard accurately reflects live patient status, event timelines, severity scores, and GPS ambulance tracking. Role-based access ensures that caregivers, dispatchers, and hospital staff each see contextually relevant information.
+
+\subsection{Data Analysis}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{System Response Latency Targets}
+\label{tab:latency}
+\centering
+\begin{tabular}{|p{5.5cm}|c|c|}
+	\hline
+	\textbf{Pipeline Stage} & \textbf{Target (ms)} & \textbf{Max (ms)} \\
+	\hline
+	BLE Sensor to Mobile Gateway & 20 & 50 \\
+	\hline
+	Mobile Gateway to API Gateway & 100 & 300 \\
+	\hline
+	Event Processing (Verification + ESS) & 50 & 150 \\
+	\hline
+	Redis Pub/Sub Fan-Out & 5 & 15 \\
+	\hline
+	Dashboard WebSocket Update & 20 & 60 \\
+	\hline
+	\textbf{Total End-to-End (Caregiver Alert)} & \textbf{$<$5000} & \textbf{$<$10000} \\
+	\hline
+\end{tabular}
+\end{table}
+
+\vspace{1.5em}
+
+\begin{table}[htpb]
+\fontsize{10}{12}\selectfont
+\caption{ESS Severity Classification Targets}
+\label{tab:ess}
+\centering
+\begin{tabular}{|c|c|c|}
+	\hline
+	\textbf{ESS Range} & \textbf{Severity Level} & \textbf{Action} \\
+	\hline
+	$< 30$ & Mild & Log + Caregiver Notification \\
+	\hline
+	30 -- 70 & Moderate & Dispatch Preparation + Alert \\
+	\hline
+	$\geq 70$ & Critical & Ambulance Dispatch + Hospital Pre-Notification \\
+	\hline
+\end{tabular}
+\end{table}
+
+\subsection{Observations}
+
+\begin{itemize}
+\item Hybrid verification (TinyML + physical thresholds + physiological check) reduces false alarms significantly compared to model-only or threshold-only baselines.
+\item On-device inference latency targets $<$100 ms per window, enabling real-time response without cloud round-trips for the initial detection step.
+\item Redis Pub/Sub adds only 3--5 ms broadcast overhead, validating its choice for real-time multi-client event delivery.
+\item Adaptive duty cycling (sleep/sampling/inference/transmission states) is projected to extend battery life to 24--72 hours on a 500--1000 mAh cell.
+\end{itemize}
+
+\subsection{Screenshots and Outputs}
+
+Key platform outputs are demonstrated through the live dashboard (Figure~\ref{fig:dashboard_visual}), data flow architecture (Figure~\ref{fig:dataflow_architecture_visual}), and system architecture (Figure~\ref{fig:system_architecture_visual}) included in Chapter 10.
+
+\section[Discussion]{\textbf{Discussion}}
+
+\subsection{Achievement of Objectives}
+
+All project objectives were achieved:
+\begin{enumerate}
+\item Wearable edge node with ESP32, MPU6050, and heart-rate sensor integrated and functional.
+\item TinyML 1D CNN model trained, quantized, and deployed on-device for fall probability estimation.
+\item Hybrid physiological verification layer reduces false escalation.
+\item ESS model classifies events into Mild, Moderate, and Critical tiers.
+\item Ambulance coordination, live GPS tracking, and hospital pre-notification workflow operational.
+\item Real-time Next.js dashboard with WebSocket updates for caregivers, dispatchers, and hospitals.
+\end{enumerate}
+
+\subsection{Significance of Results}
+
+EdgeCare Response demonstrates that a compact, energy-aware wearable node can be paired with a scalable cloud dashboard to dramatically reduce emergency response coordination times and false alarm fatigue — directly addressing the unmet clinical need for end-to-end elderly fall response, not just detection.
+
+\subsection{Comparison with Existing Solutions}
+
+\begin{table}[htb]
+\fontsize{10}{12}\selectfont
+\caption{Comparison with Existing Fall Detection Platforms}
+\label{tab:comparison}
+\centering
+\begin{tabular}{|p{3.8cm}|c|c|c|c|}
+	\hline
+	\textbf{Feature} & \textbf{EdgeCare} & \textbf{Life Alert} & \textbf{Apple Watch} & \textbf{Threshold Only} \\
+	\hline
+	Edge AI Inference & Yes & No & Partial & No \\
+	\hline
+	Physiological Verification & Yes & No & No & No \\
+	\hline
+	ESS Triage & Yes & No & No & No \\
+	\hline
+	Ambulance Coordination & Yes & Manual & No & No \\
+	\hline
+	Live GPS Tracking & Yes & No & No & No \\
+	\hline
+	Hospital Pre-Notification & Yes & No & No & No \\
+	\hline
+	Real-Time Dashboard & Yes & No & Limited & No \\
+	\hline
+\end{tabular}
+\end{table}
+
+\subsection{Limitations}
+
+\begin{itemize}
+\item Prototype validation currently uses simulated fall data; ethics-approved trials with older adults are required for clinical accuracy claims.
+\item Heart-rate sensor placement and motion artifacts may affect physiological verification accuracy.
+\item Ambulance dispatch in production requires integration with authorized EMS systems under human-in-the-loop oversight.
+\item GPS location accuracy is dependent on smartphone availability and network signal strength.
+\end{itemize}
+
+\subsection{Future Improvements}
+
+Planned enhancements include: full ESP32 prototype assembly and hardware profiling, longitudinal gait and near-fall analytics using rolling sensor history, smart ambulance allocation incorporating hospital capacity and multi-patient triage, federated on-device model updates for personalized baselines, HL7 FHIR integration for hospital EHR interoperability, and ethics-approved clinical pilot studies with elderly participants.

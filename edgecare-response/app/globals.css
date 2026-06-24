@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 202 80% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --muted: 210 40% 94%;
+  --border: 214 32% 88%;
+  --primary: 199 89% 48%;
+  --accent: 183 100% 44%;
+  --danger: 0 84% 60%;
+  --success: 158 64% 44%;
+}
+
+.dark {
+  --background: 222 47% 8%;
+  --foreground: 210 40% 98%;
+  --card: 222 42% 12%;
+  --muted: 217 33% 18%;
+  --border: 217 33% 22%;
+  --primary: 199 89% 58%;
+  --accent: 183 100% 50%;
+  --danger: 0 84% 66%;
+  --success: 158 64% 50%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(6, 182, 212, 0.18), transparent 24rem),
+    radial-gradient(circle at 86% 0%, rgba(59, 130, 246, 0.14), transparent 24rem),
+    hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.glass {
+  background: color-mix(in srgb, hsl(var(--card)) 78%, transparent);
+  border: 1px solid color-mix(in srgb, hsl(var(--border)) 78%, transparent);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.dark .glass {
+  background: color-mix(in srgb, hsl(var(--card)) 72%, transparent);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.24);
+}
+
+.leaflet-container {
+  min-height: 360px;
+  border-radius: 8px;
+}

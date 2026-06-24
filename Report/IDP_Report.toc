@@ -1,0 +1,114 @@
+\contentsline {chapter}{List of Figures}{vi}{chapter*.1}%
+\contentsline {chapter}{List of Tables}{vii}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction to the Topic}{2}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Abstract}{2}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Background}{2}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Motivation}{3}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Scope and Contributions}{3}{subsection.1.1.4}%
+\contentsline {chapter}{\numberline {2}Problem Definition}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Problem Statement}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Definition of the Problem}{5}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Background Information (Literature Review)}{5}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Wearable Fall Detection Systems}{5}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Physiological Monitoring for Fall Verification}{5}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Emergency Response and Ambulance Coordination}{6}{subsection.2.2.3}%
+\contentsline {chapter}{\numberline {3}Objectives}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Primary Objectives}{8}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Main Objectives}{8}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Expected Outcomes}{8}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Secondary Objectives}{9}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Additional Objectives}{9}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Supporting Goals}{9}{subsection.3.2.2}%
+\contentsline {chapter}{\numberline {4}Methodology and Implementation}{11}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Approach}{12}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}System Overview}{12}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Proposed System Architecture}{12}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Data Flow Architecture}{13}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Emergency Response Framework}{14}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Procedures}{15}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Requirement Analysis}{15}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Development Phase}{15}{subsection.4.3.2}%
+\contentsline {chapter}{\numberline {5}Project Execution}{16}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Planning and Design}{17}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Brainstorming and Idea Selection}{17}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Requirement Gathering}{17}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}System Design}{18}{subsection.5.1.3}%
+\contentsline {subsubsection}{ESP32 Firmware}{18}{section*.4}%
+\contentsline {subsubsection}{API Gateway Service}{18}{section*.5}%
+\contentsline {subsubsection}{Event Processing Service}{18}{section*.6}%
+\contentsline {subsubsection}{Fan-Out Service}{18}{section*.7}%
+\contentsline {subsubsection}{Database Design}{18}{section*.8}%
+\contentsline {subsubsection}{Frontend Design}{18}{section*.9}%
+\contentsline {subsection}{\numberline {5.1.4}Design Drafts / Wireframes}{19}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}Implementation}{19}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Development Process}{19}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Module Development}{19}{subsection.5.2.2}%
+\contentsline {subsubsection}{Wearable Edge Node}{19}{section*.10}%
+\contentsline {subsubsection}{API Gateway}{19}{section*.11}%
+\contentsline {subsubsection}{Event Processing Service}{19}{section*.12}%
+\contentsline {subsubsection}{Ambulance Dispatch Service}{20}{section*.13}%
+\contentsline {subsubsection}{Dashboard}{20}{section*.14}%
+\contentsline {subsubsection}{Database}{20}{section*.15}%
+\contentsline {subsection}{\numberline {5.2.3}Integration of Components}{20}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Challenges Encountered}{21}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Solutions Implemented}{21}{subsection.5.2.5}%
+\contentsline {chapter}{\numberline {6}Tools and Techniques Used}{22}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Tools}{23}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Software Tools}{23}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Hardware Tools}{23}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Purpose of Each Tool}{23}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Techniques}{24}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Techniques Applied}{24}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Reason for Selection}{25}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Implementation of Techniques}{25}{subsection.6.2.3}%
+\contentsline {chapter}{\numberline {7}Results and Discussion}{27}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Final Results}{28}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Experimental Results}{28}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Data Analysis}{28}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Observations}{29}{subsection.7.1.3}%
+\contentsline {subsection}{\numberline {7.1.4}Screenshots and Outputs}{29}{subsection.7.1.4}%
+\contentsline {section}{\numberline {7.2}Discussion}{29}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Achievement of Objectives}{29}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Significance of Results}{30}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Comparison with Existing Solutions}{30}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}Limitations}{30}{subsection.7.2.4}%
+\contentsline {subsection}{\numberline {7.2.5}Future Improvements}{30}{subsection.7.2.5}%
+\contentsline {chapter}{\numberline {8}Prototype (Software)}{32}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Prototype Description}{33}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Overview}{33}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Specifications}{33}{subsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.1.3}Features}{34}{subsection.8.1.3}%
+\contentsline {subsection}{\numberline {8.1.4}Functionalities}{34}{subsection.8.1.4}%
+\contentsline {section}{\numberline {8.2}Development Process}{34}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Prototype Design}{34}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Development Steps}{35}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Challenges Faced}{35}{subsection.8.2.3}%
+\contentsline {subsection}{\numberline {8.2.4}Solutions Adopted}{35}{subsection.8.2.4}%
+\contentsline {section}{\numberline {8.3}Testing and Validation}{35}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Testing Methodology}{35}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Test Cases}{35}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Testing Results}{36}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}Feedback Received}{36}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.5}Validation Summary}{36}{subsection.8.3.5}%
+\contentsline {chapter}{\numberline {9}Conclusion}{37}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Summary}{38}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Problem Addressed}{38}{subsection.9.1.1}%
+\contentsline {subsection}{\numberline {9.1.2}Objectives Achieved}{38}{subsection.9.1.2}%
+\contentsline {subsection}{\numberline {9.1.3}Results Obtained}{38}{subsection.9.1.3}%
+\contentsline {subsection}{\numberline {9.1.4}Overall Outcome}{39}{subsection.9.1.4}%
+\contentsline {section}{\numberline {9.2}Personal Reflection}{39}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}Student 1 Reflection -- M P Preetham}{39}{subsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.2.2}Student 2 Reflection -- Gagan B C}{39}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Student 3 Reflection -- Amaresh Malgi}{40}{subsection.9.2.3}%
+\contentsline {subsection}{\numberline {9.2.4}Student 4 Reflection -- Gokul P}{40}{subsection.9.2.4}%
+\contentsline {chapter}{\numberline {10}Visuals}{41}{chapter.10}%
+\contentsline {section}{\numberline {10.1}System Architecture Diagram}{42}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Data Flow Architecture Diagram}{43}{section.10.2}%
+\contentsline {chapter}{\numberline {11}Demonstration Video}{44}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Demo Link}{45}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Video Description}{45}{section.11.2}%
+\contentsline {chapter}{\numberline {12}References}{46}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Research Papers}{47}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Books}{47}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Websites}{47}{section.12.3}%

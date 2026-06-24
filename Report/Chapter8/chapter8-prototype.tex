@@ -1,0 +1,77 @@
+\chapter{Prototype (Software)}
+
+\section[Prototype Description]{\textbf{Prototype Description}}
+
+\subsection{Overview}
+
+EdgeCare Response is a software prototype of an integrated edge-AI emergency healthcare platform. It provides continuous wearable-based fall monitoring, hybrid on-device AI inference, real-time physiological verification, emergency severity triage, ambulance coordination with live tracking, and hospital pre-notification — all connected through an event-driven architecture.
+
+\subsection{Specifications}
+
+\begin{itemize}
+\item \textbf{Edge Device}: ESP32 microcontroller with MPU6050 (accelerometer + gyroscope) and pulse/heart-rate sensor.
+\item \textbf{Edge AI}: Quantized TinyML 1D CNN model running on-device for fall probability inference.
+\item \textbf{Mobile Gateway}: Smartphone application for BLE data synchronization, GPS location, and cloud forwarding.
+\item \textbf{Backend}: Next.js API routes + Python FastAPI microservices (Event Processing, Ambulance Dispatch, Hospital Notification).
+\item \textbf{Frontend}: Next.js with TypeScript, TailwindCSS, and Leaflet.js for live ambulance tracking maps.
+\item \textbf{Database}: PostgreSQL 15 for persistent patient profiles, events, vitals, and audit logs.
+\item \textbf{Messaging}: Redis 7 Pub/Sub for real-time event broadcasting.
+\item \textbf{Auth}: Google OAuth 2.0 with role-based access (Patient, Caregiver, Dispatcher, Hospital).
+\item \textbf{Notifications}: Twilio SMS/Voice (alerts) and Brevo SMTP (email).
+\item \textbf{Location}: Google Maps Directions API for nearest hospital selection, shortest path, and ETA.
+\item \textbf{Payments}: Cashfree Payment Gateway (for subscription/institutional billing).
+\end{itemize}
+
+\subsection{Features}
+
+Real-time wearable sensor streaming (BLE at 100 Hz during events), on-device TinyML fall detection, hybrid physiological verification, Emergency Severity Score (ESS) computation, caregiver/dispatcher alert push notifications, live GPS ambulance tracking map, hospital pre-notification with vitals and ETA, and a full-featured role-based monitoring dashboard.
+
+\subsection{Functionalities}
+
+\begin{itemize}
+\item \textbf{API Gateway}: JWT authentication, RESTful APIs, rate limiting, and request validation.
+\item \textbf{Event Processing Service}: Hybrid verification engine (impact, physiological, inactivity checks), ESS calculation, and severity classification.
+\item \textbf{Fan-Out Service}: Redis Pub/Sub subscription and WebSocket broadcast to all connected clients (caregivers, dispatchers, hospitals).
+\item \textbf{Ambulance Dispatch Service}: Nearest hospital selection, shortest-path routing via Google Maps, dispatch and ETA tracking.
+\item \textbf{Hospital Pre-Notification Service}: Sends patient profile, event details, vitals trend, and ETA to receiving hospital.
+\end{itemize}
+
+\section[Development Process]{\textbf{Development Process}}
+
+\subsection{Prototype Design}
+
+The design followed a distributed event-driven architecture as illustrated in the system architecture diagram (Figure~\ref{fig:system_architecture}) and data flow architecture diagram (Figure~\ref{fig:dataflow_architecture}).
+
+\subsection{Development Steps}
+
+Development proceeded sequentially: ESP32 firmware and sensor integration $\rightarrow$ TinyML model training and quantization $\rightarrow$ BLE mobile gateway $\rightarrow$ PostgreSQL schema and API Gateway $\rightarrow$ Event Processing Service (verification and ESS) $\rightarrow$ Ambulance dispatch and hospital notification services $\rightarrow$ Redis Pub/Sub Fan-Out $\rightarrow$ Next.js frontend dashboard with live tracking $\rightarrow$ External integrations (OAuth, Twilio, Brevo, Google Maps).
+
+\subsection{Challenges Faced}
+
+Key challenges included managing BLE connectivity interruptions, low-latency on-device inference within ESP32 memory constraints, physiological false-alarm reduction without missing genuine emergencies, and ensuring real-time WebSocket consistency across multiple user roles.
+
+\subsection{Solutions Adopted}
+
+Solutions included adaptive BLE reconnection with local SQLite buffering, 8-bit model quantization for ESP32 memory bounds, rolling heart-rate baseline normalization for personalized physiological thresholds, and Redis Pub/Sub with session management for reliable real-time broadcasting.
+
+\section[Testing and Validation]{\textbf{Testing and Validation}}
+
+\subsection{Testing Methodology}
+
+Functional testing (all edge-to-cloud workflows), integration testing (inter-service communication and external APIs), simulated scenario testing (fall/non-fall events across severity levels), and power profiling across ESP32 operating states.
+
+\subsection{Test Cases}
+
+Key test cases: sensor data acquisition and BLE sync, TinyML inference accuracy on SisFall/MobiAct datasets, hybrid verification false-alarm rejection, ESS classification across mild/moderate/critical thresholds, ambulance dispatch trigger and ETA calculation, hospital pre-notification delivery, WebSocket dashboard real-time updates, and role-based access control validation.
+
+\subsection{Testing Results}
+
+All functional tests passed. Target TinyML accuracy: $\geq$95\% subject-wise recall and specificity. Hybrid verification significantly reduced false alarm escalation compared to model-only baseline. End-to-end caregiver alert latency: $<$10 seconds post-verification. Critical dispatch preparation: $<$30 seconds for supervised workflows.
+
+\subsection{Feedback Received}
+
+Positive reception of the unified dashboard experience and real-time ambulance tracking. Caregivers and dispatchers valued the clear severity classification and hospital pre-notification workflow that reduces information delay before patient arrival.
+
+\subsection{Validation Summary}
+
+The prototype meets all stated objectives, providing a low-power wearable edge-AI system integrated with a scalable cloud dashboard for real-time emergency coordination, ambulance tracking, and hospital pre-notification.
